@@ -52,6 +52,16 @@ void ATestingGroundsCharacter::BeginPlay()
 	// Call the base class  
 	Super::BeginPlay();
 
+}
+
+//////////////////////////////////////////////////////////////////////////
+// Input
+
+void ATestingGroundsCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+{
+	// set up gameplay key bindings
+	check(PlayerInputComponent);
+
 	if (GunBlueprint == NULL)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Gun blueprint is missing!"));
@@ -62,15 +72,8 @@ void ATestingGroundsCharacter::BeginPlay()
 
 	//Attach gun mesh component to Skeleton, doing it here because the skeleton is not yet created in the constructor
 	Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
-}
 
-//////////////////////////////////////////////////////////////////////////
-// Input
-
-void ATestingGroundsCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
-{
-	// set up gameplay key bindings
-	check(PlayerInputComponent);
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, Gun, &AGun::OnFire);
 
 	// Bind jump events
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
